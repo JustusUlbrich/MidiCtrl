@@ -3,7 +3,7 @@ Use any midi device to alter the volume of individual programs and apps on windo
 
 # Preview
 
-![](preview/MidiCtrl.gif)
+![](preview/MidiCtrlPreview.gif)
 
 # Instructions
 Each midi channel / slider (currently 8 max.) can be linked to a set of programs or apps to control their volume.
