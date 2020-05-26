@@ -1,0 +1,70 @@
+﻿<Window x:Class="MidiCtrl.MainWindow"
+        x:Name="window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MidiCtrl"
+        mc:Ignorable="d"
+        Title="MidiCtrl" Height="600" Width="400" Visibility="Visible" Background="{DynamicResource GridSplitterBackgroundBrush}">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="{Binding SettingsVisibility, ElementName=window}" Grid.RowSpan="3">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity=".75"/>
+            </Grid.Background>
+            <!-- Add overlay controls -->
+        </Grid>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button  x:Name="refreshButton">
+                Refresh
+            </Button>
+            <Button  x:Name="settingsButton">
+                Settings
+            </Button>
+        </StackPanel>
+        <ListBox x:Name="listBox" Grid.Row="1" Grid.ColumnSpan="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="OnAppSelectionChange" SelectionMode="Multiple">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding FriendlyName}" Margin="0 0 2 0" />
+                        <TextBlock Grid.Column="1" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
+                        <Slider Grid.Column="2" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Maximum="100" LargeChange="5" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" MinWidth="120"/>
+                    </Grid>
+                    <!--
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding FriendlyName}" Margin="0 0 2 0" />
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding AudioSessionControl.GetProcessID}" Margin="2,0" />
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding AudioSessionControl.State}" Margin="2,0"/>
+                        <TextBlock Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
+                        <Slider DockPanel.Dock="Right" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Maximum="1" LargeChange="0.1" SmallChange="0.025" TickFrequency="0.1" TickPlacement="TopLeft" MinWidth="120"/>
+                    </DockPanel>
+                    -->
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox x:Name="midiList" Grid.Row="2" Grid.ColumnSpan="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock  DockPanel.Dock="Left" Text="{Binding Name}" Margin="0 0 2 0" />
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
