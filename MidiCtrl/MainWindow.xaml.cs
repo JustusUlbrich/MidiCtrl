@@ -1,9 +1,7 @@
-﻿
-using NAudio.Midi;
+﻿using NAudio.Midi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,6 +14,8 @@ namespace MidiCtrl
     {
         MidiEnumerator midiEnumerator = new MidiEnumerator();
 
+        List<string> allowedDevices = new List<String>();
+
         List<string> selectedApps = new List<string>();
         Dictionary<int, string[]> channelToApp = new Dictionary<int, string[]>();
 
@@ -26,7 +26,10 @@ namespace MidiCtrl
             InitializeComponent();
             midiEnumerator.InitMidiDevices();
 
-            this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions();
+            this.deviceList.ItemsSource = AudioContextEnumerator.GetAudioDevices();
+            InitAllowedDevices();
+
+            this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions(allowedDevices);
             this.midiList.ItemsSource = midiEnumerator.midis;
 
             this.midiEnumerator.midis[0].MidiIn.MessageReceived += MidiIn_MessageReceived;
@@ -43,13 +46,34 @@ namespace MidiCtrl
                     channelToApp[i] = apps;
                 }
             }
-            
+
             notifications = new Notification();
         }
         
+        private void InitAllowedDevices()
+        {
+            string deviceString = (string)Properties.Settings.Default["devices"];
+            if (deviceString != null && deviceString.Length > 0)
+            {
+                var storedDevices = deviceString.Split(';').ToList();
+
+                foreach (string ID in storedDevices )
+                {
+                    var allowedDevice = deviceList.Items
+                        .Cast<MyAudioDevice>()
+                        .Where(device => ID == device.ID)
+                        .First();
+
+                    this.deviceList.SelectedItems.Add(allowedDevice);
+                }
+
+                this.allowedDevices = storedDevices;
+            }
+        }
+
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions();
+            this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions(allowedDevices);
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -112,8 +136,6 @@ namespace MidiCtrl
 
         public void OnAppSelectionChange(object sender, SelectionChangedEventArgs args)
         {
-            var hasSelected = (this.listBox.SelectedItems.Count > 0);
-
             selectedApps.Clear();
             foreach (MyAudioSession selected in this.listBox.SelectedItems)
             {
@@ -127,7 +149,19 @@ namespace MidiCtrl
 
             string appString = String.Join(";", apps.ToArray());
             Properties.Settings.Default["channel" + channel] = appString;
+            Properties.Settings.Default.Save();
+        }
 
+        private void DeviceListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            allowedDevices.Clear();
+            foreach (MyAudioDevice selected in this.deviceList.SelectedItems)
+            {
+                allowedDevices.Add(selected.ID);
+            }
+
+            string deviceString = String.Join(";", allowedDevices.ToArray());
+            Properties.Settings.Default["devices"] = deviceString;
             Properties.Settings.Default.Save();
         }
     }

@@ -10,14 +10,15 @@
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="8*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button  x:Name="refreshButton">
                 Refresh
             </Button>
@@ -25,23 +26,25 @@
                 Settings
             </Button>
         </StackPanel>
-        <ListBox x:Name="listBox" Grid.Row="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="OnAppSelectionChange" SelectionMode="Multiple">
+        <ListBox x:Name="listBox" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="OnAppSelectionChange" SelectionMode="Multiple">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding FriendlyName}" Margin="0 0 2 0" />
-                        <TextBlock Grid.Column="1" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
+                        <Image Source="{Binding IconImage, Mode=OneTime}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding FriendlyName}" Margin="10 0 2 0" TextTrimming="WordEllipsis" />
                         <Slider Grid.Column="2" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Maximum="100" LargeChange="5" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" MinWidth="120"/>
+                        <TextBlock Grid.Column="3" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="midiList" Grid.Row="2" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+        <ListBox x:Name="midiList" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
@@ -50,5 +53,23 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <ListBox x:Name="deviceList" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" SelectionMode="Multiple" SelectionChanged="DeviceListSelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock  DockPanel.Dock="Left" Text="{Binding FriendlyName}" Margin="0 0 2 0" />
+                        <TextBlock  DockPanel.Dock="Left" Text="{Binding ID}" Margin="0 0 2 0" />
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <!--
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            -->
+        </ListBox>
+        
     </Grid>
 </Window>
