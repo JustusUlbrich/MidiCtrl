@@ -17,13 +17,6 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="{Binding SettingsVisibility, ElementName=window}" Grid.RowSpan="3">
-            <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity=".75"/>
-            </Grid.Background>
-            <!-- Add overlay controls -->
-        </Grid>
-
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button  x:Name="refreshButton">
                 Refresh
@@ -32,7 +25,7 @@
                 Settings
             </Button>
         </StackPanel>
-        <ListBox x:Name="listBox" Grid.Row="1" Grid.ColumnSpan="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="OnAppSelectionChange" SelectionMode="Multiple">
+        <ListBox x:Name="listBox" Grid.Row="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="OnAppSelectionChange" SelectionMode="Multiple">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -45,19 +38,10 @@
                         <TextBlock Grid.Column="1" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
                         <Slider Grid.Column="2" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Maximum="100" LargeChange="5" SmallChange="1" TickFrequency="5" TickPlacement="TopLeft" MinWidth="120"/>
                     </Grid>
-                    <!--
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="{Binding FriendlyName}" Margin="0 0 2 0" />
-                        <TextBlock DockPanel.Dock="Left" Text="{Binding AudioSessionControl.GetProcessID}" Margin="2,0" />
-                        <TextBlock DockPanel.Dock="Left" Text="{Binding AudioSessionControl.State}" Margin="2,0"/>
-                        <TextBlock Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Margin="2,0"/>
-                        <Slider DockPanel.Dock="Right" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Maximum="1" LargeChange="0.1" SmallChange="0.025" TickFrequency="0.1" TickPlacement="TopLeft" MinWidth="120"/>
-                    </DockPanel>
-                    -->
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="midiList" Grid.Row="2" Grid.ColumnSpan="1" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+        <ListBox x:Name="midiList" Grid.Row="2" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>

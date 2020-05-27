@@ -19,13 +19,10 @@ namespace MidiCtrl
         List<string> selectedApps = new List<string>();
         Dictionary<int, string[]> channelToApp = new Dictionary<int, string[]>();
 
-        private System.Threading.Timer minimizeTimer;
-
-        public string SettingsVisibility { get; set; }
+        Notification notifications;
 
         public MainWindow()
         {
-            SettingsVisibility = "Collapsed";
             InitializeComponent();
             midiEnumerator.InitMidiDevices();
 
@@ -46,12 +43,10 @@ namespace MidiCtrl
                     channelToApp[i] = apps;
                 }
             }
-
-            minimizeTimer = new System.Threading.Timer(_ =>
-                Application.Current.Dispatcher.BeginInvoke((Action)(() => this.WindowState = WindowState.Minimized))
-            );
+            
+            notifications = new Notification();
         }
-
+        
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions();
@@ -59,7 +54,19 @@ namespace MidiCtrl
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.SettingsVisibility = "Visible";
+            // TODO: Show Settings
+        }
+
+        private Point getCurrentScreenCorner()
+        {
+            var screen = System.Windows.Forms.Screen.FromHandle(
+                new System.Windows.Interop.WindowInteropHelper(this).Handle
+            );
+            var workingArea = screen.WorkingArea;
+            var transform = PresentationSource.FromVisual(this).CompositionTarget.TransformFromDevice;
+            var corner = transform.Transform(new Point(workingArea.Right, workingArea.Bottom));
+
+            return corner;
         }
 
         private void MidiIn_MessageReceived(object sender, MidiInMessageEventArgs e)
@@ -93,16 +100,10 @@ namespace MidiCtrl
                     foreach (var item in itemsOnChannel)
                     {
                         item.Volume = (int)(100 * volume);
+
+                        this.Dispatcher.BeginInvoke((Action)(() => this.notifications.Add(item, getCurrentScreenCorner())));
                     }
                 }
-
-
-                Application.Current.Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Activate();
-                    this.minimizeTimer.Change(1000, Timeout.Infinite);
-                }));
             }
             catch (System.ArgumentOutOfRangeException)
             {

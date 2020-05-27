@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace MidiCtrl
 {
-    class MyAudioSession : INotifyPropertyChanged
+    public class MyAudioSession : INotifyPropertyChanged
     {
         public AudioSessionControl AudioSessionControl { get; set; }
 
