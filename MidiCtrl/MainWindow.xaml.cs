@@ -1,9 +1,11 @@
 ﻿using NAudio.Midi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MidiCtrl
 {
@@ -32,7 +34,10 @@ namespace MidiCtrl
             this.listBox.ItemsSource = AudioContextEnumerator.GetAudioSessions(allowedDevices);
             this.midiList.ItemsSource = midiEnumerator.midis;
 
-            this.midiEnumerator.midis[0].MidiIn.MessageReceived += MidiIn_MessageReceived;
+            foreach (var midi in midiEnumerator.midis)
+            {
+                midi.MidiIn.MessageReceived += MidiIn_MessageReceived;
+            }
 
             this.refreshButton.Click += RefreshButton_Click;
             this.settingsButton.Click += SettingsButton_Click;
@@ -62,7 +67,8 @@ namespace MidiCtrl
                     var allowedDevice = deviceList.Items
                         .Cast<MyAudioDevice>()
                         .Where(device => ID == device.ID)
-                        .First();
+                        .DefaultIfEmpty(null)
+                        .FirstOrDefault();
 
                     this.deviceList.SelectedItems.Add(allowedDevice);
                 }
@@ -87,7 +93,9 @@ namespace MidiCtrl
                 new System.Windows.Interop.WindowInteropHelper(this).Handle
             );
             var workingArea = screen.WorkingArea;
-            var transform = PresentationSource.FromVisual(this).CompositionTarget.TransformFromDevice;
+            var source = PresentationSource.FromVisual(this);
+
+            var transform = source != null ? source.CompositionTarget.TransformFromDevice : new Matrix();
             var corner = transform.Transform(new Point(workingArea.Right, workingArea.Bottom));
 
             return corner;
@@ -163,6 +171,26 @@ namespace MidiCtrl
             string deviceString = String.Join(";", allowedDevices.ToArray());
             Properties.Settings.Default["devices"] = deviceString;
             Properties.Settings.Default.Save();
+        }
+
+        // Minimize to system tray when application is minimized.
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized) this.Hide();
+
+            base.OnStateChanged(e);
+        }
+
+        // Minimize to system tray when application is closed.
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // setting cancel to true will cancel the close request
+            // so the application is not closed
+            e.Cancel = true;
+
+            this.Hide();
+
+            base.OnClosing(e);
         }
     }
 }

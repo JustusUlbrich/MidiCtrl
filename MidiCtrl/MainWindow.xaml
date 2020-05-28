@@ -6,11 +6,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MidiCtrl"
         mc:Ignorable="d"
-        Title="MidiCtrl" Height="600" Width="400" Visibility="Visible" Background="{DynamicResource GridSplitterBackgroundBrush}">
+        Title="MidiCtrl" Height="600" Width="400" Visibility="Visible" Background="{DynamicResource GridSplitterBackgroundBrush}" BorderThickness="0" WindowStyle="ToolWindow">
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -62,14 +62,7 @@
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            <!--
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            -->
         </ListBox>
-        
+
     </Grid>
 </Window>
