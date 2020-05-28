@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MidiCtrl"
         mc:Ignorable="d"
-        Title="Notification" Width="150" Height="320"
+        Title="Notification" Width="170" Height="320"
   WindowStyle="None" AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False">
 
     <Grid RenderTransformOrigin="0,1" >
@@ -40,13 +40,15 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="45" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="125">
+                    <Grid Height="45" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
                             <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="40"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding FriendlyName}" Padding="10" FontFamily="Roboto Light" FontSize="18" />
-                        <TextBlock Grid.Column="1" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Padding="10" FontFamily="Roboto Light" FontSize="18" TextAlignment="Right"/>
+                        <Image Grid.Column="0" Margin="10" HorizontalAlignment="Right" Source="{Binding IconImage, Mode=OneTime}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding FriendlyName}" Padding="10" FontFamily="Roboto Light" FontSize="18" />
+                        <TextBlock Grid.Column="2" Text="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Padding="10" FontFamily="Roboto Light" FontSize="18" TextAlignment="Right"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
