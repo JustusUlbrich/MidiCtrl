@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MidiCtrl"
         mc:Ignorable="d"
-        Title="Notification" Width="170" Height="320"
+        Title="Notification" Width="180" Height="320"
   WindowStyle="None" AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False">
 
     <Grid RenderTransformOrigin="0,1" >
@@ -24,7 +24,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" />
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1" />
                                         <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" From="0" Duration="0:0:.2"/>
                                     </Storyboard>
                                 </BeginStoryboard>

@@ -39,7 +39,7 @@ namespace MidiCtrl
             {
                 AudioSessions.Add(audioSession);
 
-                timer = new Timer(1000);
+                timer = new Timer(2000);
                 timer.AutoReset = false;
                 timer.Elapsed += (s, e) => Timer_Elapsed(s, e, audioSession);
 
