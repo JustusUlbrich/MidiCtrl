@@ -136,9 +136,16 @@ namespace MidiCtrl
                 if (processID > 0) // && !sessionList.Exists(a => a.AudioSessionControl.GetProcessID == processID))
                 {
                     // Extract and store icon
-                    Icon ico = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
-                    BitmapSource iconImage = Imaging.CreateBitmapSourceFromHIcon(ico.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                    audioSession.IconImage = iconImage;
+                    try
+                    {
+                        Icon ico = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
+
+                        BitmapSource iconImage = Imaging.CreateBitmapSourceFromHIcon(ico.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                        audioSession.IconImage = iconImage;
+                    }
+                    catch
+                    {
+                    }
 
                     // Init Volume
                     audioSession.ChangeVolumeExternal(audioSession.AudioSessionControl.SimpleAudioVolume.Volume);
